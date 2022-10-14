@@ -1,0 +1,18 @@
+
+---
+apiVersion: punasusi.com/v1alpha1
+kind: ClusterClaim
+metadata:
+  name: cpdemo
+  labels:
+    cluster-owner: punasusi
+spec:
+  id: cpdemo
+  # resourcegroupname: crossplane-demo
+  compositionSelector:
+    matchLabels:
+      provider: azure
+      cluster: aks
+  parameters:
+    nodeSize: small
+    minNodeCount: 3

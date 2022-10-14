@@ -1,0 +1,10 @@
+---
+
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: crossplane-provider-jet-azure
+spec:
+  package: crossplane/provider-jet-azure:v0.6.0-preview
+  # controllerConfigRef:
+  #   name: debug-config

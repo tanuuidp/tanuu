@@ -1,0 +1,15 @@
+apiVersion: punasusi.com/v1alpha1
+kind: ClusterClaim
+metadata:
+  name: example-team-eks
+  labels:
+    cluster-owner: punasusi
+spec:
+  id: example-team-eks
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      cluster: eks
+  parameters:
+    nodeSize: medium
+    minNodeCount: 3
