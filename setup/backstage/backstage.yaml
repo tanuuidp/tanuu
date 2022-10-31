@@ -14,7 +14,9 @@ spec:
       labels:
         app: backstage
     spec:
-      containers:
+        imagePullSecrets:
+        - name: regcred
+        containers:
         - name: backstage
           image: punasusi/backstage:0.0.1
           imagePullPolicy: IfNotPresent
