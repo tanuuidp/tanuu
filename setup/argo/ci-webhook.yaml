@@ -1,0 +1,212 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: ci-webhook
+  namespace: argo
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+    - name: test-dep
+      eventSourceName: webhook
+      eventName: ci-demo
+  triggers:
+    - template:
+        name: webhook-workflow-trigger
+        k8s:
+          operation: create
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: idp-cd-
+                labels:
+                  workflows.argoproj.io/archive-strategy: "false"
+              spec:
+                entrypoint: full
+                arguments:
+                  parameters:
+                  - name: app_repo
+                    # the value will get overridden by event payload from test-dep
+                    value: hello world
+                  - name: container_image
+                    # the value will get overridden by event payload from test-dep
+                    value: hello world
+                  - name: container_tag
+                    # the value will get overridden by event payload from test-dep
+                    value: hello world
+                  - name: container_name
+                    # the value will get overridden by event payload from test-dep
+                    value: hello world
+                  
+                volumes:
+                - name: kaniko-secret
+                  secret:
+                    secretName: regcred
+                    items:
+                      - key: .dockerconfigjson
+                        path: config.json
+                templates:
+                - name: full
+                  inputs:
+                    parameters:
+                    - name: app_repo
+                    - name: container_image
+                    - name: container_tag
+                    - name: container_name
+                  dag:
+                    tasks:
+                    - name: build
+                      template: build-kaniko-git
+                      arguments:
+                        parameters:
+                        - name: app_repo
+                          value: "{{inputs.parameters.app_repo}}"
+                        - name: container_image
+                          value: "{{inputs.parameters.container_image}}"
+                        - name: container_tag
+                          value: "{{inputs.parameters.container_tag}}"
+                    - name: deploy-dev-env
+                      template: deploy-ojbect
+                      arguments:
+                        parameters:
+                        - name: container_image
+                          value: "{{inputs.parameters.container_image}}"
+                        - name: container_tag
+                          value: "{{inputs.parameters.container_tag}}"
+                        - name: container_name
+                          value: "{{inputs.parameters.container_name}}"
+                      dependencies:
+                      - tag-passed-tests
+                      - mock-security-scan
+                    - name: tag-passed-tests
+                      template: mock-task
+                      arguments:
+                        parameters:
+                        - name: message
+                          value: "{{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}} tagged as QA_PASSED"
+                      dependencies:
+                      - mock-unit-tests
+                      - mock-IT-tests
+                      - mock-quality-analysis
+                    - name: mock-unit-tests
+                      template: mock-task
+                      arguments:
+                        parameters:
+                        - name: message
+                          value:  "{{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}} is being security scanned"
+                      dependencies:
+                      - build
+                    - name: mock-security-scan
+                      template: mock-task
+                      arguments:
+                        parameters:
+                        - name: message
+                          value:  "{{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}} is being security scanned"
+                      dependencies:
+                      - tag-passed-tests
+                    - name: mock-IT-tests
+                      template: mock-task
+                      arguments:
+                        parameters:
+                        - name: message
+                          value:  "{{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}} is being security scanned"
+                      dependencies:
+                      - build
+                    - name: mock-quality-analysis
+                      template: mock-task
+                      arguments:
+                        parameters:
+                        - name: message
+                          value:  "{{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}} is being security scanned"
+                      dependencies:
+                      - build
+                - name: mock-task
+                  inputs:
+                    parameters:
+                    - name: message
+                  container:
+                    image: alpine
+                    command: [echo]
+                    args:
+                    - "{{inputs.parameters.message}}"
+                - name: deploy-ojbect
+                  inputs:
+                    parameters:
+                    - name: container_image
+                    - name: container_tag
+                    - name: container_name
+                  resource:
+                    action: create
+                    manifest: |
+                      apiVersion: apps/v1
+                      kind: Deployment
+                      metadata:
+                        name: {{inputs.parameters.container_name}}-{{workflow.name}}
+                        namespace: default
+                      spec:
+                        replicas: 1
+                        selector:
+                          matchLabels:
+                            app: {{workflow.name}}
+                        template:
+                          metadata:
+                            creationTimestamp: null
+                            labels:
+                              app: {{workflow.name}}
+                          spec:
+                            containers:
+                              - name: {{inputs.parameters.container_name}}-{{workflow.name}}
+                                image: {{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}}
+                                ports:
+                                  - name: http
+                                    containerPort: 80
+                                    protocol: TCP
+                                resources:
+                                  limits:
+                                    cpu: 500m
+                                    memory: 512M
+                                  requests:
+                                    cpu: 200m
+                                    memory: 256M
+                            imagePullSecrets:
+                              - name: regcred                             
+                - name: build-kaniko-git
+                  inputs:
+                    parameters:
+                    - name: app_repo
+                    - name: container_image
+                    - name: container_tag
+                  container:
+                    image: gcr.io/kaniko-project/executor:debug
+                    resources:
+                      requests:
+                        ephemeral-storage: "2Gi"
+                        memory: 250M
+                    command: [/kaniko/executor]
+                    args:
+                    - --context={{inputs.parameters.app_repo}}
+                    - --destination={{inputs.parameters.container_image}}:{{inputs.parameters.container_tag}}
+                    volumeMounts:
+                      - name: kaniko-secret
+                        mountPath: /kaniko/.docker/
+             
+          parameters:
+            - src:
+                dependencyName: test-dep
+                dataKey: body.repo
+              dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: test-dep
+                dataKey: body.container
+              dest: spec.arguments.parameters.1.value
+            - src:
+                dependencyName: test-dep
+                dataKey: body.tag
+              dest: spec.arguments.parameters.2.value
+            - src:
+                dependencyName: test-dep
+                dataKey: body.name
+              dest: spec.arguments.parameters.3.value
+---
