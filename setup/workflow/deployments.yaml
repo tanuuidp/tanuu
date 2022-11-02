@@ -22,7 +22,7 @@ spec:
       containers:
         - args:
             - server
-            - --insecure
+            - --secure false
           env: []
           image: quay.io/argoproj/argocli:v3.3.9
           name: argo-server
