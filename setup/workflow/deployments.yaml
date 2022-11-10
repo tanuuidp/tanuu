@@ -22,8 +22,9 @@ spec:
       containers:
         - args:
             - server
-            - --secure false
-          env: []
+          env:
+            - name: ARGO_SECURE
+              value: 'false'
           image: quay.io/argoproj/argocli:v3.3.9
           name: argo-server
           ports:
