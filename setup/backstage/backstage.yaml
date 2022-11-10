@@ -18,11 +18,14 @@ spec:
         - name: regcred
         containers:
         - name: backstage
-          image: punasusi/backstage:0.0.3
+          image: punasusi/backstage:0.0.7
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 7007
+          env:
+            - name: BACKSTAGE_URL
+              value: 'http://backstage'
           envFrom:
             - secretRef:
                 name: backstage-secrets
