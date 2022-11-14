@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: argocd-application-creation-sensor
+  namespace: argo
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+    - name: eventsource-dep
+      eventSourceName: backstage
+      eventName: argocd-application-creation
+  triggers:
+    - template:
+        name: first-build-trigger
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: first-build-
+                namespace: argo
+              spec:
+                arguments:
+                  parameters:
+                    - name: app_name
+                    - name: dockerfile
+                    - name: docker_context
+                workflowTemplateRef:
+                  name: build-workflow
+          parameters:
+            - src:
+                dependencyName: eventsource-dep
+                dataKey: body.app_name
+              dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: eventsource-dep
+                dataKey: body.dockerfile
+                value: "Dockerfile"
+              dest: spec.arguments.parameters.1.value
+            - src:
+                dependencyName: eventsource-dep
+                dataKey: body.docker_context
+                value: "."
+              dest: spec.arguments.parameters.2.value
+    - template:
+        name: argocd-application-creation-trigger
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: argocd-application-creation-
+                namespace: argo
+              spec:
+                arguments:
+                  parameters:
+                    - name: app_name
+                    - name: setup_database
+                workflowTemplateRef:
+                  name: argocd-application-creation
+          parameters:
+            - src:
+                dependencyName: eventsource-dep
+                dataKey: body.app_name
+              dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: eventsource-dep
+                dataKey: body.setup_database
+                value: "false"
+              dest: spec.arguments.parameters.1.value
