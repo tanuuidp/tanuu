@@ -17,19 +17,7 @@ metadata:
   name: backstage
   namespace: argo
 spec:
-  #service:
-  #  ports:
-  #    - port: 12000
-  #      targetPort: 12000
   webhook:
-    # event-source can run multiple HTTP servers. Simply define a unique port to start a new HTTP server
-    #example:
-      # port to run HTTP server on
-      #port: "12000"
-      # endpoint to listen to
-      #endpoint: /example
-      # HTTP request method to allow. In this case, only POST requests are accepted
-      #method: POST
     ci-demo:
       port: "12000"
       endpoint: /ci-demo
@@ -38,11 +26,6 @@ spec:
       port: "12000"
       endpoint: /argocd-application-creation
       method: POST
-    #bitbucket-push:
-    #  port: "12000"
-    #  endpoint: /bitbucket-push
-    #  method: POST
-      
 ---
 apiVersion: v1
 kind: ServiceAccount
