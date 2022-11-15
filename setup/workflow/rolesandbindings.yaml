@@ -299,6 +299,9 @@ subjects:
 - kind: ServiceAccount
   name: argo
   namespace: argo
+- kind: ServiceAccount
+  name: default
+  namespace: argo
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
