@@ -14,7 +14,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: webhook
+  name: backstage
   namespace: argo
 spec:
   #service:
@@ -123,3 +123,16 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backstage-eventsource-svc
+  namespace: argo
+spec:
+  ports:
+  - port: 12000
+    protocol: TCP
+    targetPort: 12000
+  selector:
+    eventsource-name: backstage
