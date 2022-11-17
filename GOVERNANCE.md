@@ -1,59 +1,52 @@
-# Project Governance
+# Overview
+This project is led by a project lead and managed by the community. That is, the community actively contributes to the day-to-day maintenance of the project, but the general strategic line is drawn by the project lead. In case of disagreement, they have the last word. It is the project lead’s job to resolve disputes within the community and to ensure that the project is able to progress in a coordinated way. In turn, it is the community’s job to guide the decisions of the project lead through active engagement and contribution.
 
-- [Values](#values)
-- [Maintainers](#maintainers)
-- [Becoming a Maintainer](#becoming-a-maintainer)
+# Roles And Responsibilities
+## Project Lead
 
-## Values
+Typically, the project lead, or project lead, is self-appointed. However, because the community always has the ability to fork, this person is fully answerable to the community. The project lead’s role is a difficult one: they set the strategic objectives of the project and communicate these clearly to the community. They also have to understand the community as a whole and strive to satisfy as many conflicting needs as possible, while ensuring that the project survives in the long term.
 
-The TanuuIDP Project and its leadership embrace the following values:
+In many ways, the role of the project lead is less about dictatorship and more about diplomacy. The key is to ensure that, as the project expands, the right people are given influence over it and the community rallies behind the vision of the project lead. The lead’s job is then to ensure that the committers (see below) make the right decisions on behalf of the project. Generally speaking, as long as the committers are aligned with the project’s strategy, the project lead will allow them to proceed as they desire.
 
-* Openness: Communication and decision-making happens in the open and is discoverable for future
-  reference. As much as possible, all discussions and work take place in public
-  forums and open repositories.
+## Committers
 
-* Fairness: All stakeholders have the opportunity to provide feedback and submit
-  contributions, which will be considered on their merits.
+Committers are contributors who have made several valuable contributions to the project and are now relied upon to both write code directly to the repository and screen the contributions of others. In many cases they are programmers but it is also possible that they contribute in a different role. Typically, a committer will focus on a specific aspect of the project, and will bring a level of expertise and understanding that earns them the respect of the community and the project lead. The role of committer is not an official one, it is simply a position that influential members of the community will find themselves in as the project lead looks to them for guidance and support.
 
-* Community over Product or Company: Sustaining and growing our community takes
-  priority over shipping code or sponsors' organizational goals.  Each
-  contributor participates in the project as an individual.
+Committers have no authority over the overall direction of the project. However, they do have the ear of the project lead. It is a committer’s job to ensure that the lead is aware of the community’s needs and collective objectives, and to help develop or elicit appropriate contributions to the project. Often, committers are given informal control over their specific areas of responsibility, and are assigned rights to directly modify certain areas of the source code. That is, although committers do not have explicit decision-making authority, they will often find that their actions are synonymous with the decisions made by the lead.
 
-* Inclusivity: We innovate through different perspectives and skill sets, which
-  can only be accomplished in a welcoming and respectful environment.
+## Contributors
 
-* Participation: Responsibilities within the project are earned through
-  participation, and there is a clear path up the contributor ladder into leadership
-  positions.
+Contributors are community members who either have no desire to become committers, or have not yet been given the opportunity by the project lead. They make valuable contributions, such as those outlined in the list below, but generally do not have the authority to make direct changes to the project code. Contributors engage with the project through communication tools and via reports and patches attached to issues in the issue tracker.
 
-## Maintainers
+Anyone can become a contributor. There is no expectation of commitment to the project, no specific skill requirements and no selection process. To become a contributor, a community member simply has to perform one or more actions that are beneficial to the project.
 
-TanuuIDP Project Maintainers have write access to the [project GitHub repository](https://github.com/tanuuidp/tanuu).
-They can merge their own patches or patches from others. The current maintainers
-can be found in [OWNERS](./OWNERS).  Maintainers collectively manage the project's
-resources and contributors.
+Some contributors will already be engaging with the project as users, but will also find themselves doing one or more of the following:
 
-This privilege is granted with some expectation of responsibility: maintainers
-are people who care about the TanuuIDP Project project and want to help it grow and
-improve. A maintainer is not just someone who can make changes, but someone who
-has demonstrated their ability to collaborate with the team, get the most
-knowledgeable people to review code and docs, contribute high-quality code, and
-follow through to fix issues (in code or tests).
+supporting new users (current users often provide the most effective new user support)
+reporting bugs
+identifying requirements
+supplying graphics and web design
+programming
+assisting with project infrastructure
+writing documentation
+fixing bugs
+adding features
+As contributors gain experience and familiarity with the project, they may find that the project lead starts relying on them more and more. When this begins to happen, they gradually adopt the role of committer, as described above.
 
-A maintainer is a contributor to the project's success and a citizen helping
-the project succeed.
+## Users
 
-## Becoming a Maintainer
+Users are community members who have a need for the project. They are the most important members of the community: without them, the project would have no purpose. Anyone can be a user; there are no specific requirements.
 
-To become a Maintainer you need to demonstrate the following:
+Users should be encouraged to participate in the life of the project and the community as much as possible. User contributions enable the project team to ensure that they are satisfying the needs of those users. Common user activities include (but are not limited to):
 
-  * commitment to the project:
-  * ability to write quality code and/or documentation,
-  * ability to collaborate with the team,
-  * understanding of how the team works (policies, processes for testing and code review, etc),
-  * understanding of the project's code base and coding and documentation style.
+evangelising about the project
+informing developers of project strengths and weaknesses from a new user’s perspective
+providing moral support (a ‘thank you’ goes a long way)
+providing financial support
+Users who continue to engage with the project and its community will often find themselves becoming more and more involved. Such users may then go on to become contributors, as described above.
 
-A new Maintainer must be proposed by an existing maintainer. A simple majority vote of existing Maintainers
-approves the application.
+## Support
+All participants in the community are encouraged to provide support for new users within the project management infrastructure. This support is provided as a way of growing the community. Those seeking support should recognise that all support activity within the project is voluntary and is therefore provided as and when time allows. A user requiring guaranteed response times or results should therefore seek to purchase a support contract from a vendor. (Of course, that vendor should be an active member of the community.) However, for those willing to engage with the project on its own terms, and willing to help support other users, the community support channels are ideal.
 
-Maintainers who are selected will be granted the necessary GitHub rights.
+## Contribution Process
+Anyone can contribute to the project, regardless of their skills, as there are many ways to contribute. For instance, a contributor might be active on the project issue tracker, or might supply patches. 
