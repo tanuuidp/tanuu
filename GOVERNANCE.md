@@ -1,12 +1,11 @@
 # Overview
-This project is led by a project lead and managed by the community. That is, the community actively contributes to the day-to-day maintenance of the project, but the general strategic line is drawn by the project lead. In case of disagreement, they have the last word. It is the project lead’s job to resolve disputes within the community and to ensure that the project is able to progress in a coordinated way. In turn, it is the community’s job to guide the decisions of the project lead through active engagement and contribution.
+This project is led by a project lead and managed by the community. That is, the community actively contributes to the day-to-day maintenance of the project, but the general strategic line is drawn by the project lead. In case of disagreement, the project lead has the last word. It is the project lead’s job to resolve disputes within the community and to ensure that the project is able to progress in a coordinated way. In turn, it is the community’s job to guide the decisions of the project lead through active engagement and contribution.
 
-# Roles And Responsibilities
+
 ## Project Lead
 
-Typically, the project lead, or project lead, is self-appointed. However, because the community always has the ability to fork, this person is fully answerable to the community. The project lead’s role is a difficult one: they set the strategic objectives of the project and communicate these clearly to the community. They also have to understand the community as a whole and strive to satisfy as many conflicting needs as possible, while ensuring that the project survives in the long term.
+The lead’s job is then to ensure that the committers (see below) make the right decisions on behalf of the project. Generally speaking, as long as the committers are aligned with the project’s strategy, the project lead will allow them to proceed as they desire.
 
-In many ways, the role of the project lead is less about dictatorship and more about diplomacy. The key is to ensure that, as the project expands, the right people are given influence over it and the community rallies behind the vision of the project lead. The lead’s job is then to ensure that the committers (see below) make the right decisions on behalf of the project. Generally speaking, as long as the committers are aligned with the project’s strategy, the project lead will allow them to proceed as they desire.
 
 ## Committers
 
@@ -44,9 +43,3 @@ informing developers of project strengths and weaknesses from a new user’s per
 providing moral support (a ‘thank you’ goes a long way)
 providing financial support
 Users who continue to engage with the project and its community will often find themselves becoming more and more involved. Such users may then go on to become contributors, as described above.
-
-## Support
-All participants in the community are encouraged to provide support for new users within the project management infrastructure. This support is provided as a way of growing the community. Those seeking support should recognise that all support activity within the project is voluntary and is therefore provided as and when time allows. A user requiring guaranteed response times or results should therefore seek to purchase a support contract from a vendor. (Of course, that vendor should be an active member of the community.) However, for those willing to engage with the project on its own terms, and willing to help support other users, the community support channels are ideal.
-
-## Contribution Process
-Anyone can contribute to the project, regardless of their skills, as there are many ways to contribute. For instance, a contributor might be active on the project issue tracker, or might supply patches. 
