@@ -36,13 +36,34 @@ spec:
           parameters:
           - name: app_name
             value: "{{inputs.parameters.app_name}}"
+      - name: dependency-check
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "Dependency check"
+        dependencies: [checkout]
+      - name: security-scan
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "security scan"
+        dependencies: [dependency-check]
+      - name: robot-test
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "robot test"
+        dependencies: [checkout]
       - name: deploy-project
         template: deploy-object
         arguments:
           parameters:
           - name: yaml
             value: "{{tasks.checkout.outputs.parameters.project_yaml}}"
-        dependencies: [checkout]
+        dependencies: [robot-test, security-scan]
       - name: deploy-application
         template: deploy-object
         arguments:
@@ -82,3 +103,13 @@ spec:
     resource:
       action: apply
       manifest: "{{inputs.parameters.yaml}}"
+
+  - name: mock-task
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine
+      command: [echo]
+      args:
+      - "{{inputs.parameters.message}}"
