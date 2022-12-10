@@ -1,15 +1,17 @@
 apiVersion: punasusi.com/v1alpha1
 kind: ClusterClaim
 metadata:
-  name: example-team-eks
+  name: placeholder
+  namespace: tanuu
   labels:
-    cluster-owner: punasusi
+    cluster-owner: tanuu
 spec:
-  id: example-team-eks
+  id: placeholder
   compositionSelector:
     matchLabels:
       provider: aws
       cluster: eks
   parameters:
-    nodeSize: medium
+    nodeSize: small
     minNodeCount: 3
+    version: "1.23"

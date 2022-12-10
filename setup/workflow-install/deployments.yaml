@@ -1,0 +1,111 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: workflow-controller
+value: 1000000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-server
+  namespace: argo
+spec:
+  selector:
+    matchLabels:
+      app: argo-server
+  template:
+    metadata:
+      labels:
+        app: argo-server
+    spec:
+      containers:
+        - args:
+            - server
+          env:
+            - name: ARGO_SECURE
+              value: 'false'
+          image: quay.io/argoproj/argocli:v3.3.9
+          name: argo-server
+          ports:
+            - containerPort: 2746
+              name: web
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 2746
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      nodeSelector:
+        kubernetes.io/os: linux
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: argo-server
+      volumes:
+        - emptyDir: {}
+          name: tmp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-controller
+  namespace: argo
+spec:
+  selector:
+    matchLabels:
+      app: workflow-controller
+  template:
+    metadata:
+      labels:
+        app: workflow-controller
+    spec:
+      containers:
+        - args:
+            - --executor-image
+            - quay.io/argoproj/argoexec:v3.3.9
+          command:
+            - workflow-controller
+          env:
+            - name: LEADER_ELECTION_IDENTITY
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+          image: quay.io/argoproj/workflow-controller:v3.3.9
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 6060
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            timeoutSeconds: 30
+          name: workflow-controller
+          ports:
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 6060
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: workflow-controller
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: argo

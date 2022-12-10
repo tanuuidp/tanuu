@@ -1,0 +1,115 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: argocd-application-creation
+  namespace: argo
+spec:
+  entrypoint: run-workflow
+  arguments:
+    parameters:
+    - name: app_name
+      value: python-hello-world
+    - name: setup_database
+      value: false
+  serviceAccountName: default
+  imagePullSecrets:
+  - name: regcred
+  volumeClaimTemplates:
+  - metadata:
+      name: git
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 20Mi
+  templates:
+  - name: run-workflow
+    inputs:
+      parameters:
+      - name: app_name
+      - name: setup_database
+    dag:
+      tasks:
+      - name: checkout
+        template: git-checkout
+        arguments:
+          parameters:
+          - name: app_name
+            value: "{{inputs.parameters.app_name}}"
+      - name: dependency-check
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "Dependency check"
+        dependencies: [checkout]
+      - name: security-scan
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "security scan"
+        dependencies: [dependency-check]
+      - name: robot-test
+        template: mock-task
+        arguments:
+          parameters:
+          - name: message
+            value: "robot test"
+        dependencies: [checkout]
+      - name: deploy-project
+        template: deploy-object
+        arguments:
+          parameters:
+          - name: yaml
+            value: "{{tasks.checkout.outputs.parameters.project_yaml}}"
+        dependencies: [robot-test, security-scan]
+      - name: deploy-application
+        template: deploy-object
+        arguments:
+          parameters:
+          - name: yaml
+            value: "{{tasks.checkout.outputs.parameters.application_yaml}}"
+        dependencies: [deploy-project]
+  - name: git-checkout
+    inputs:
+      parameters:
+      - name: app_name
+      artifacts:
+      - name: argo-source
+        path: /tmp/git
+        git:
+          repo: "https://github.com/tanuudemo/{{inputs.parameters.app_name}}.git"
+          revision: "main"
+    container:
+      image: python:alpine
+      command: [cp, -r, /tmp/git/, /mnt/git/repo]
+      volumeMounts:
+      - name: git
+        mountPath: /mnt/git
+    outputs:
+      parameters:
+      - name: application_yaml
+        valueFrom:
+          path: /tmp/git/deploy/argocd/application.yaml
+      - name: project_yaml
+        valueFrom:
+          path: /tmp/git/deploy/argocd/project.yaml
+  
+  - name: deploy-object
+    inputs:
+      parameters:
+      - name: yaml
+    resource:
+      action: apply
+      manifest: "{{inputs.parameters.yaml}}"
+
+  - name: mock-task
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine
+      command: [echo]
+      args:
+      - "{{inputs.parameters.message}}"
