@@ -1,12 +1,22 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: argocd
+  name: crossplane-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tanuu
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: argo
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
 ---
 apiVersion: v1
 kind: Namespace
