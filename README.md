@@ -13,9 +13,18 @@ If not using the cli, these are the steps to install tanuu toolset into an exist
 
 ```
 kubectl apply -f bootstrap/namespaces.yaml
-kubectl apply -f crds/argocd-crds.yaml  
-kubectl apply -f crds/event-crds.yaml 
-kubectl apply -f crds/workflow-crds.yaml 
+kubectl apply -f crds/
+kubectl apply -f setup/argo-tools/
+kubectl apply -f setup/workflow-install/
+kubectl apply -f setup/argo-config/
+kubectl apply -f setup/cert-manager/
+```
 
+### Backstage setup/install
+First, a secret named 'backstage-secret' should be created with env variables used for github use in backstage.
+NOTE: Near term roadmap will move this into Vault.
 
+Once the secret exists: 
+```
+kubectl apply -f setup/backstage/
 ```
