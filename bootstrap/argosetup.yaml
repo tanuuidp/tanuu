@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tanuu
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tanuu-setup-app
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+  project: tanuu
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+    path: setup/argo-applications
+    repoURL: https://github.com/tanuuidp/tanuu.git
+    targetRevision: working
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
