@@ -16,6 +16,7 @@ kubectl apply -f bootstrap/namespaces.yaml
 kubectl apply -f crds/
 kubectl apply -f bootstrap/argocd.yaml
 kubectl apply -f bootstrap/argosetup.yaml  
+kubectl apply -f bootstrap/argocd/  
 ```
 
 ### Backstage setup/install
