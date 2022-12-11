@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: workflow-setup-app
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+  project: tanuu
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+    path: setup/workflow-install
+    repoURL: https://github.com/tanuuidp/tanuu.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

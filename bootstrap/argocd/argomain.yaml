@@ -1,0 +1,70 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tanuu-setup-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  destination:
+    name: in-cluster
+  project: tanuu
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+    path: setup/argo-applications
+    repoURL: https://github.com/tanuuidp/tanuu.git
+    targetRevision: working
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  project: default
+  source:
+    chart: vault
+    repoURL: https://helm.releases.hashicorp.com
+    targetRevision: 0.22.0
+    helm:
+      releaseName: vault
+      parameters:
+      - name: injector.enabled
+        value: "false" 
+      - name: csi.enabled
+        value: "true" 
+      - name: server.standalone.config
+        value: >
+          ui = false
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+            # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+            #telemetry {
+            #  unauthenticated_metrics_access = "true"
+            #}
+          }
+
+          storage "file" {
+            path = "/vault/data"
+          }
+
+  destination:
+    name: in-cluster
+    namespace: vault
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
