@@ -49,7 +49,7 @@ spec:
     directory:
       jsonnet: {}
       recurse: true
-    path: argomain
+    path: argoroot
     repoURL: https://github.com/tanuuidp/tanuu.git
     targetRevision: working
   syncPolicy:
