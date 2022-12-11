@@ -65,7 +65,7 @@ spec:
     protocol: TCP
     targetPort: 2746
   selector:
-    app.kubernetes.io/name: argo-server
+    app: argo-server
   type: NodePort
 ---
 apiVersion: v1
@@ -79,7 +79,7 @@ spec:
     nodePort: 30083
     port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 7007
   selector:
     app: backstage
   type: NodePort
