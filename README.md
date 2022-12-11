@@ -14,10 +14,8 @@ If not using the cli, these are the steps to install tanuu toolset into an exist
 ```
 kubectl apply -f bootstrap/namespaces.yaml
 kubectl apply -f crds/
-kubectl apply -f setup/argo-tools/
-kubectl apply -f setup/workflow-install/
-kubectl apply -f setup/argo-config/
-kubectl apply -f setup/cert-manager/
+kubectl apply -f bootstrap/argocd.yaml
+kubectl apply -f bootstrap/argosetup.yaml  
 ```
 
 ### Backstage setup/install
