@@ -16,7 +16,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tanuu-setup-app
+  name: argo-root
   namespace: argocd
 spec:
   destination:
@@ -26,7 +26,7 @@ spec:
     directory:
       jsonnet: {}
       recurse: true
-    path: setup/argo-applications
+    path: bootstrap/argocd
     repoURL: https://github.com/tanuuidp/tanuu.git
     targetRevision: working
   syncPolicy:
