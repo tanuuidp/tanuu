@@ -1,3 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tanuu-setup-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  destination:
+    name: in-cluster
+  project: tanuu
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+    path: setup/argo-applications
+    repoURL: https://github.com/tanuuidp/tanuu.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
 apiVersion: v1
 kind: Service
 metadata:

@@ -51,7 +51,7 @@ spec:
       recurse: true
     path: argoroot
     repoURL: https://github.com/tanuuidp/tanuu.git
-    targetRevision: working
+    targetRevision: main
   syncPolicy:
     automated:
       prune: true

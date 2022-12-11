@@ -16,7 +16,7 @@ spec:
       recurse: true
     path: setup/argo-applications
     repoURL: https://github.com/tanuuidp/tanuu.git
-    targetRevision: working
+    targetRevision: main
   syncPolicy:
     automated:
       prune: true
