@@ -30,7 +30,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-5"
 spec:
-  project: default
+  project: tanuu
   source:
     chart: vault
     repoURL: https://helm.releases.hashicorp.com
