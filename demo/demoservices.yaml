@@ -65,13 +65,13 @@ spec:
     protocol: TCP
     targetPort: 2746
   selector:
-    app.kubernetes.io/name: argo-server
+    app: argo-server
   type: NodePort
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backstage-incoming
+  name: backstage-demo
   namespace: backstage
 spec:
   ports:
@@ -79,7 +79,40 @@ spec:
     nodePort: 30083
     port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 7007
   selector:
-    app: backstage
+    app: backstagedemo
   type: NodePort
+---
+# kubernetes/backstage.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstagedemo
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstagedemo
+  template:
+    metadata:
+      labels:
+        app: backstagedemo
+    spec:
+        imagePullSecrets:
+        - name: regcred
+        containers:
+        - name: backstagedemo
+          image: tanuuidp/backstage:demo0.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7007
+          env:
+            - name: BACKSTAGE_URL
+              value: 'http://127.0.0.1:8083'
+          envFrom:
+            - secretRef:
+                name: backstage-secrets
+---
