@@ -22,6 +22,8 @@ spec:
       containers:
         - args:
             - server
+            - --auth-mode
+            - server
           env:
             - name: ARGO_SECURE
               value: 'false'
