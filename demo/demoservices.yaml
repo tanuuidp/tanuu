@@ -111,7 +111,7 @@ spec:
               containerPort: 7007
           env:
             - name: BACKSTAGE_URL
-              value: 'http://127.0.0.1:8083'
+              value: 'http://127.0.0.1:7007'
           envFrom:
             - secretRef:
                 name: backstage-secrets
