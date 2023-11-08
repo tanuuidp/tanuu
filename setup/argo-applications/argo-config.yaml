@@ -13,7 +13,7 @@ spec:
       recurse: true
     path: setup/argo-config
     repoURL: https://github.com/tanuuidp/tanuu.git
-    targetRevision: HEAD
+    targetRevision: templateSandbox_daniel
   syncPolicy:
     automated:
       prune: true
